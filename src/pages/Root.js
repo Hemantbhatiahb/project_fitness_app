@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import MainNavigation from "../components/MainNavigation";
+import MainNavigation from "../components/navigation/MainNavigation";
 import { Box } from "@mui/material";
 import Footer from "../assets/Footer";
 

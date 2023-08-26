@@ -1,7 +1,7 @@
 import React from "react";
-import HeroBanner from "../components/HeroBanner";
-import SearchExercises from "../components/SearchExercises";
-import Exercises from "../components/Exercises";
+import HeroBanner from "../components/banner/HeroBanner";
+import SearchExercises from "../components/search/SearchExercises";
+import Exercises from "../components/exercises/Exercises";
 import { Box } from "@mui/material";
 import { useState } from "react";
 
@@ -18,9 +18,9 @@ function HomePage() {
         setBodyPart={setBodyPart}
       />
       <Exercises
+        exercises={exercises}
         setExercises={setExercises}
         bodyPart={bodyPart}
-        setBodyPart={setBodyPart}
       />
     </Box>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
-import HeroBannerImage from "../assets/images/banner.png";
+import HeroBannerImage from "../../assets/images/banner.png";
+import { scrollHandler } from "../../utils/FetchData";
 
 const HeroBanner = () => {
   return (
@@ -38,6 +39,7 @@ const HeroBanner = () => {
           padding: "10px",
           marginBottom: "20px",
         }}
+        onClick={(event)=>{scrollHandler(event)}}
       >
         Explore Exercises
       </Button>

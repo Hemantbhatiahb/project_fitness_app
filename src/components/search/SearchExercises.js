@@ -1,12 +1,13 @@
 import React from "react";
 import { Box, Stack, TextField, Button, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import { exerciseOptions, fetchData } from "../utils/FetchData";
-import HorizontalScrollBar from "./HorizontalScrollBar";
+import { exerciseOptions, fetchData } from "../../utils/FetchData";
+import HorizontalScrollBar from "../reusable/HorizontalScrollBar";
 
 const SearchExercises = ({ bodyPart, setBodyPart, setExercises }) => {
   const [search, setSearch] = useState("");
   const [bodyParts, setBodyParts] = useState([]);
+  const [invalidInput, setInvalidInput] = useState(false);
 
   useEffect(() => {
     const fetchExercisesData = async () => {
@@ -19,26 +20,36 @@ const SearchExercises = ({ bodyPart, setBodyPart, setExercises }) => {
     fetchExercisesData();
   }, []);
 
+  const scrollToElement = (elementId) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const searchHandler = async () => {
-    if (search.trim().length > 0 && search !== "") {
-      try {
-        const exercisesData = await fetchData(
-          "https://exercisedb.p.rapidapi.com/exercises",
-          exerciseOptions
-        );
-        const searchedExercises = exercisesData.filter(
-          (exercise) =>
-            exercise.name.toLowerCase().includes(search) ||
-            exercise.target.toLowerCase().includes(search) ||
-            exercise.equipment.toLowerCase().includes(search) ||
-            exercise.bodyPart.toLowerCase().includes(search)
-        );
-        console.log(searchedExercises);
-        setExercises(searchedExercises);
-        setSearch("");
-      } catch (error) {
-        console.log(error);
-      }
+    setInvalidInput(false);
+    if (search.trim().length <= 0 && search === "") {
+      setInvalidInput(true);
+      return;
+    }
+    try {
+      const exercisesData = await fetchData(
+        "https://exercisedb.p.rapidapi.com/exercises",
+        exerciseOptions
+      );
+      const searchedExercises = exercisesData.filter(
+        (exercise) =>
+          exercise.name.toLowerCase().includes(search) ||
+          exercise.target.toLowerCase().includes(search) ||
+          exercise.equipment.toLowerCase().includes(search) ||
+          exercise.bodyPart.toLowerCase().includes(search)
+      );
+      setExercises(searchedExercises);
+      scrollToElement("exercises");
+      setSearch("");
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
@@ -53,8 +64,9 @@ const SearchExercises = ({ bodyPart, setBodyPart, setExercises }) => {
       <Box position="relative" mb="72px">
         <TextField
           height="76px"
+          error={invalidInput}
           sx={{
-            input: { fontWeight: "700", border: "none", borderRadius: "4px" },
+            input: { fontWeight: "700", border: "none", borderRadius: "40px" },
             width: { lg: "1170px", xs: "350px" },
             backgroundColor: "#fff",
             borderRadius: "40px",
@@ -88,6 +100,7 @@ const SearchExercises = ({ bodyPart, setBodyPart, setExercises }) => {
           data={bodyParts}
           bodyPart={bodyPart}
           setBodyPart={setBodyPart}
+          isBodyPart={true}
         />
       </Box>
     </Stack>
