@@ -1,8 +1,25 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
 import gymIcon from "../../assets/icons/gym.png";
+import { useDispatch, useSelector } from "react-redux";
+import { exSliceActions } from "../../store/exerciseSlice";
 
-const BodyPart = ({ item, setBodyPart, bodyPart }) => {
+const BodyPart = ({ item }) => {
+  const bodyPart = useSelector((state) => state.exSlice.bodyPart);
+  const dispatch = useDispatch();
+
+  //set body part to selected item
+  const setBodyPartHandler = () => {
+    dispatch(exSliceActions.setBodyPart(item));
+    dispatch(
+      exSliceActions.filterExercises({
+        filterIndex: "bodyPart",
+        filterValue: item,
+      })
+    );
+    window.scrollTo({ top: "1800", left: "100", behavior: "smooth" });
+  };
+
   return (
     <Stack
       type="button"
@@ -18,10 +35,7 @@ const BodyPart = ({ item, setBodyPart, bodyPart }) => {
         cursor: "pointer",
         gap: "47px",
       }}
-      onClick={() => {
-        setBodyPart(item);
-        window.scrollTo({ top: "1800", left: "100", behavior: "smooth" });
-      }}
+      onClick={setBodyPartHandler}
     >
       <img
         src={gymIcon}

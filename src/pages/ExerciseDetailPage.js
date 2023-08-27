@@ -6,18 +6,22 @@ import SimilarExercises from "../components/exercise-detail/SimilarExercises";
 import { Box } from "@mui/material";
 import { exerciseOptions, fetchData, youtubeOptions } from "../utils/FetchData";
 import Loader from "../components/reusable/Loader";
+import { useSelector } from "react-redux";
 
 function ExerciseDetailPage() {
   const [exerciseDetail, setExerciseDetail] = useState({});
   const [exerciseVideos, setExerciseVideos] = useState([]);
   const [targetMuscleExercises, setTargetMuscleExercises] = useState([]);
   const [equipmentExercises, setEquipmentExercises] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false);
+
   const { exerciseId } = useParams();
 
   useEffect(() => {
     setIsLoading(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
+
     const fetchExerciseData = async () => {
       const exerciseDbUrl = "https://exercisedb.p.rapidapi.com";
       const youtubeSearchUrl =
@@ -28,12 +32,12 @@ function ExerciseDetailPage() {
           `${exerciseDbUrl}/exercises/exercise/${exerciseId}`,
           exerciseOptions
         );
-
+        setExerciseDetail(exerciseDetailData);
         const exerciseVideoData = await fetchData(
           `${youtubeSearchUrl}/search?query=${exerciseDetailData.name} exercise`,
           youtubeOptions
         );
-        setIsLoading(false);
+        setExerciseVideos(exerciseVideoData.contents);
 
         const targetMuscleExerciseData = await fetchData(
           `${exerciseDbUrl}/exercises/target/${exerciseDetailData.target}`,
@@ -45,8 +49,7 @@ function ExerciseDetailPage() {
           exerciseOptions
         );
 
-        setExerciseDetail(exerciseDetailData);
-        setExerciseVideos(exerciseVideoData.contents);
+        setIsLoading(false);
         setTargetMuscleExercises(targetMuscleExerciseData);
         setEquipmentExercises(equipmentExerciseData);
       } catch (error) {
@@ -56,6 +59,8 @@ function ExerciseDetailPage() {
 
     fetchExerciseData();
   }, [exerciseId]);
+
+  useEffect(() => {}, [exerciseId]);
 
   if (!exerciseDetail) return <div>No Data</div>;
   return (

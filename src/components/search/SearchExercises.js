@@ -3,21 +3,28 @@ import { Box, Stack, TextField, Button, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { exerciseOptions, fetchData } from "../../utils/FetchData";
 import HorizontalScrollBar from "../reusable/HorizontalScrollBar";
+import { useDispatch } from "react-redux";
+import { exSliceActions } from "../../store/exerciseSlice";
 
-const SearchExercises = ({ bodyPart, setBodyPart, setExercises }) => {
-  const [search, setSearch] = useState("");
+const SearchExercises = () => {
+  const [inputSearch, setInputSearch] = useState("");
   const [bodyParts, setBodyParts] = useState([]);
   const [invalidInput, setInvalidInput] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchExercisesData = async () => {
-      const fetchedBodyParts = await fetchData(
-        "https://exercisedb.p.rapidapi.com/exercises/bodyPartList",
-        exerciseOptions
-      );
-      setBodyParts(["all", ...fetchedBodyParts]);
+    const fetchBodyPartsData = async () => {
+      try {
+        const fetchedBodyParts = await fetchData(
+          "https://exercisedb.p.rapidapi.com/exercises/bodyPartList",
+          exerciseOptions
+        );
+        setBodyParts(["all", ...fetchedBodyParts]);
+      } catch (error) {
+        console.log(error);
+      }
     };
-    fetchExercisesData();
+    fetchBodyPartsData();
   }, []);
 
   const scrollToElement = (elementId) => {
@@ -29,29 +36,21 @@ const SearchExercises = ({ bodyPart, setBodyPart, setExercises }) => {
 
   const searchHandler = async () => {
     setInvalidInput(false);
-    if (search.trim().length <= 0 && search === "") {
+    if (inputSearch.trim().length <= 0 && inputSearch === "") {
       setInvalidInput(true);
       return;
     }
-    try {
-      const exercisesData = await fetchData(
-        "https://exercisedb.p.rapidapi.com/exercises",
-        exerciseOptions
-      );
-      const searchedExercises = exercisesData.filter(
-        (exercise) =>
-          exercise.name.toLowerCase().includes(search) ||
-          exercise.target.toLowerCase().includes(search) ||
-          exercise.equipment.toLowerCase().includes(search) ||
-          exercise.bodyPart.toLowerCase().includes(search)
-      );
-      setExercises(searchedExercises);
-      scrollToElement("exercises");
-      setSearch("");
-    } catch (error) {
-      console.log(error);
-    }
+
+    dispatch(
+      exSliceActions.filterExercises({
+        filterIndex: "search",
+        filterValue: inputSearch,
+      })
+    );
+    scrollToElement("exercises");
+    setInputSearch("");
   };
+
   return (
     <Stack alignItems="center" justifyContent="center" mt="37px" p="20px">
       <Typography
@@ -71,9 +70,9 @@ const SearchExercises = ({ bodyPart, setBodyPart, setExercises }) => {
             backgroundColor: "#fff",
             borderRadius: "40px",
           }}
-          value={search}
+          value={inputSearch}
           onChange={(e) => {
-            setSearch(e.target.value.toLowerCase());
+            setInputSearch(e.target.value.toLowerCase());
           }}
           placeholder="Search Exercise"
           type="text"
@@ -96,12 +95,7 @@ const SearchExercises = ({ bodyPart, setBodyPart, setExercises }) => {
         </Button>
       </Box>
       <Box sx={{ position: "relative", width: "100%", padding: "20px" }}>
-        <HorizontalScrollBar
-          data={bodyParts}
-          bodyPart={bodyPart}
-          setBodyPart={setBodyPart}
-          isBodyPart={true}
-        />
+        <HorizontalScrollBar data={bodyParts} isBodyPart={true} />
       </Box>
     </Stack>
   );

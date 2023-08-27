@@ -3,25 +3,35 @@ import HeroBanner from "../components/banner/HeroBanner";
 import SearchExercises from "../components/search/SearchExercises";
 import Exercises from "../components/exercises/Exercises";
 import { Box } from "@mui/material";
-import { useState } from "react";
+import { useEffect } from "react";
+import { exerciseOptions, fetchData } from "../utils/FetchData";
+import { useDispatch } from "react-redux";
+import { exSliceActions } from "../store/exerciseSlice";
 
 function HomePage() {
-  const [exercises, setExercises] = useState([]);
-  const [bodyPart, setBodyPart] = useState("all");
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchAllExercises = async () => {
+      try {
+        const exercisesData = await fetchData(
+          "https://exercisedb.p.rapidapi.com/exercises",
+          exerciseOptions
+        );
+        dispatch(exSliceActions.setExercises(exercisesData));
+        dispatch(exSliceActions.filterExercises(exercisesData));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchAllExercises();
+  }, [dispatch]);
 
   return (
     <Box>
       <HeroBanner />
-      <SearchExercises
-        setExercises={setExercises}
-        bodyPart={bodyPart}
-        setBodyPart={setBodyPart}
-      />
-      <Exercises
-        exercises={exercises}
-        setExercises={setExercises}
-        bodyPart={bodyPart}
-      />
+      <SearchExercises />
+      <Exercises />
     </Box>
   );
 }
