@@ -19,7 +19,7 @@ export const youtubeOptions = {
 export const fetchData = async (url,options)=>{
     const response  =  await fetch(url,options);
     if(!response.ok) {
-        throw new Error('Could not fetch data!')
+        throw new Error(JSON.stringify({message:'Could not fetch exercises'}, {status:500}))
     }
     const responseData =  response.json();
     return responseData ;
