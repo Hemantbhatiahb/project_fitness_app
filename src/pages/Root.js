@@ -2,7 +2,6 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import MainNavigation from "../components/navigation/MainNavigation";
 import { Box } from "@mui/material";
-import Footer from "../assets/Footer";
 
 function RootPage() {
   return (
@@ -11,7 +10,6 @@ function RootPage() {
       <main>
         <Outlet />
       </main>
-      <Footer />
     </Box>
   );
 }

@@ -4,7 +4,6 @@ import HorizontalScrollbar from "../reusable/HorizontalScrollBar";
 import Loader from "../reusable/Loader";
 
 const SimilarExercises = ({ exercises, title }) => {
-  console.log("exercises", exercises);
   return (
     <Box sx={{ mt: { lg: "100px", xs: "0px" } }}>
       <Typography

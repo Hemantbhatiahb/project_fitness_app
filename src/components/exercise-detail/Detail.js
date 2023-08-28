@@ -22,6 +22,7 @@ const Detail = ({ exerciseDetail }) => {
       name: target,
     },
   ];
+  
   return (
     <Stack
       gap="60px"

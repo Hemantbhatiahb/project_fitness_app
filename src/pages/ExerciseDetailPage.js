@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { json, useParams} from "react-router-dom";
 import Detail from "../components/exercise-detail/Detail";
 import ExerciseVideos from "../components/exercise-detail/ExerciseVideos";
 import SimilarExercises from "../components/exercise-detail/SimilarExercises";
 import { Box } from "@mui/material";
 import { exerciseOptions, fetchData, youtubeOptions } from "../utils/FetchData";
 import Loader from "../components/reusable/Loader";
-import { useSelector } from "react-redux";
+import Footer from "../assets/Footer";
 
 function ExerciseDetailPage() {
   const [exerciseDetail, setExerciseDetail] = useState({});
   const [exerciseVideos, setExerciseVideos] = useState([]);
   const [targetMuscleExercises, setTargetMuscleExercises] = useState([]);
   const [equipmentExercises, setEquipmentExercises] = useState([]);
-
+  // const allExercises = useLoaderData();
   const [isLoading, setIsLoading] = useState(false);
 
   const { exerciseId } = useParams();
@@ -32,6 +32,9 @@ function ExerciseDetailPage() {
           `${exerciseDbUrl}/exercises/exercise/${exerciseId}`,
           exerciseOptions
         );
+        // const exerciseDetailData = allExercises.find(
+        //   (exercise) => exercise.id === exerciseId
+        // );
         setExerciseDetail(exerciseDetailData);
         const exerciseVideoData = await fetchData(
           `${youtubeSearchUrl}/search?query=${exerciseDetailData.name} exercise`,
@@ -49,11 +52,19 @@ function ExerciseDetailPage() {
           exerciseOptions
         );
 
+        // const targetMuscleExerciseData = allExercises.filter(
+        //   (exercise) => exercise.target === exerciseDetailData.target
+        // );
+
+        // const equipmentExerciseData = allExercises.filter(
+        //   (exercise) => exercise.equipment === exerciseDetailData.equipment
+        // );
+
         setIsLoading(false);
         setTargetMuscleExercises(targetMuscleExerciseData);
         setEquipmentExercises(equipmentExerciseData);
       } catch (error) {
-        console.log(error);
+        throw json({ message: "Could not fetch exercises" }, { status: "500" });
       }
     };
 
@@ -76,10 +87,24 @@ function ExerciseDetailPage() {
           />
           <SimilarExercises exercises={targetMuscleExercises} title="target" />
           <SimilarExercises exercises={equipmentExercises} title="equipment" />
+          <Footer />
         </React.Fragment>
       )}
     </Box>
   );
 }
+
+// Loader can be if user don't want to fetch data using multiple apis
+export const loader = async () => {
+  const response = await fetch(
+    "https://exercisedb.p.rapidapi.com/exercises",
+    exerciseOptions
+  );
+  if (!response.ok) {
+    throw json({ message: "could not fetch Exercises" }, { status: 500 });
+  } else {
+    return response;
+  }
+};
 
 export default ExerciseDetailPage;

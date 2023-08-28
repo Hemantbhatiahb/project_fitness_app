@@ -63,6 +63,7 @@ const SearchExercises = () => {
       <Box position="relative" mb="72px">
         <TextField
           height="76px"
+          label="Search Exercise" variant="outlined"
           error={invalidInput}
           sx={{
             input: { fontWeight: "700", border: "none", borderRadius: "40px" },
@@ -74,8 +75,7 @@ const SearchExercises = () => {
           onChange={(e) => {
             setInputSearch(e.target.value.toLowerCase());
           }}
-          placeholder="Search Exercise"
-          type="text"
+          type="search"
         />
         <Button
           className="search-btn"
