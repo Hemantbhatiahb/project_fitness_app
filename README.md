@@ -6,7 +6,7 @@ https://github.com/Hemantbhatiahb/project_fitness_app/assets/47587839/b302a50d-9
 
 LIVE - https://fitness-club2023.netlify.app/
 <br><br>
-Technology Stack:
+### Technology Stack:
 
 1) Frontend Framework: React.js
 2) UI Library: Material-UI for styling and components
