@@ -4,7 +4,7 @@ The fitness web app is a user-friendly platform where fitness enthusiasts can ex
 
 https://github.com/Hemantbhatiahb/project_fitness_app/assets/47587839/b302a50d-986d-4839-90fe-71ab8df381ca
 
-LIVE - https://fitness-club2023.netlify.app/
+LIVE - https://fitness-club123.netlify.app/
 <br><br>
 ### Technology Stack:
 
