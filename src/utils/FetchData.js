@@ -3,16 +3,16 @@ const rapidApiKey =process.env.REACT_APP_RAPID_API_KEY
 export const exerciseOptions = {
 	method: 'GET',
 	headers: {
-		'X-RapidAPI-Key': rapidApiKey,
-		'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
+		'x-rapidapi-key': rapidApiKey,
+		'x-rapidapi-host': 'exercisedb.p.rapidapi.com'
 	}
 };
 
 export const youtubeOptions = {
 	method: 'GET',
 	headers: {
-		'X-RapidAPI-Key': rapidApiKey,
-		'X-RapidAPI-Host': 'youtube-search-and-download.p.rapidapi.com'
+		'x-rapidapi-key': rapidApiKey,
+		'x-rapidapi-host': 'youtube-search-and-download.p.rapidapi.com'
 	}
 };
 

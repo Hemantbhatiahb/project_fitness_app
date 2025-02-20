@@ -17,7 +17,7 @@ function HomePage() {
     const fetchAllExercises = async () => {
       try {
         const exercisesData = await fetchData(
-          "https://exercisedb.p.rapidapi.com/exercises",
+          "https://exercisedb.p.rapidapi.com/exercises?limit=100",
           exerciseOptions
         );
         dispatch(exSliceActions.setExercises(exercisesData));
